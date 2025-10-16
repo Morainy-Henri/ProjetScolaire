@@ -1,0 +1,30 @@
+# === Environnements virtuels ===
+venv/
+.env
+*.env
+
+# === Fichiers compilés Python ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# === Fichiers de base de données SQLite (si un jour tu en utilises) ===
+db.sqlite3
+
+# === Django ===
+staticfiles/
+media/
+
+# === Node / React ===
+frontend/node_modules/
+frontend/build/
+
+# === IDE / éditeurs ===
+.vscode/
+.idea/
+*.code-workspace
+
+# === Système ===
+.DS_Store
+Thumbs.db

@@ -1,0 +1,153 @@
+TABLE : Cycle
+    libelle (PK)
+
+TABLE : Niveau
+    libelle (PK)
+    cycleRef (FK → Cycle.libelle)
+
+TABLE : AnneeScolaire
+    idAnnee (PK)
+    annee
+
+TABLE : Classe
+    idClasse (PK)
+    libelle
+    nivRef (FK → Niveau.libelle)
+    anneeRef (FK → AnneeScolaire.idAnnee)
+
+TABLE : Tuteur
+    idTuteur (PK)
+    tuteur
+    professionTuteur
+    contactTuteur
+
+TABLE : Eleve
+    idEleve (PK)
+    matricule
+    nom
+    prenom
+    dateNaissance
+    lieuNaissance
+    tuteurRef (FK → Tuteur.idTuteur)
+
+TABLE : Inscription
+    idInscription (PK)
+    dateInscription
+    statut
+    classeRef (FK → Classe.idClasse)
+    eleveRef (FK → Eleve.idEleve)
+
+TABLE : Tarification
+    idTarif (PK)
+    typePaiement         -- ('Ecolage', 'Droit', 'Cantine', etc.)
+    montant              -- montant officiel pour ce type de paiement
+    nivRef (FK → Niveau.libelle)
+    anneeRef (FK → AnneeScolaire.idAnnee)
+
+TABLE : Paiement
+    numPaiement (PK)
+    datePaiement
+    modePaiement
+    montantTotal         -- somme des montants des détails
+    insRef (FK → Inscription.idInscription)
+
+TABLE : PaiementDetail
+    idDetail (PK)
+    paiementRef (FK → Paiement.numPaiement)
+    tarifRef (FK → Tarification.idTarif)
+    periode              -- ex. 'Octobre 2025' (NULL si Droit)
+    estPaye              -- ('Oui' ou 'Non')
+
+TABLE : Enseignant
+    idEnseignant (PK)
+    nomEnseignant
+    contact
+    adresse
+
+TABLE : Discipline
+    idDiscipline (PK)
+    libelle
+    description
+
+TABLE : Matiere
+    idMatiere (PK)
+    libelle
+    disRef (FK → Discipline.idDiscipline)
+
+TABLE : MatiereNiveau
+    nivRef (FK → Niveau.libelle)
+    matRef (FK → Matiere.idMatiere)
+    valeurCoef
+
+TABLE : Enseignement
+    idEnseignement (PK)
+    matRef (FK → Matiere.idMatiere)
+    EnsRef (FK → Enseignant.idEnseignant)
+
+TABLE : EnseignementClasse
+    EnsRef (FK → Enseignant.idEnseignant)
+    matRef (FK → Matiere.idMatiere)
+    classeRef (FK → Classe.idClasse)
+    PRIMARY KEY (EnsRef, matRef, classeRef)
+
+TABLE : EmploisDuTemps
+    idEDT (PK)
+    classeRef (FK → Classe.idClasse)
+
+TABLE : Jour
+    libelle (PK)
+    edtRef (FK → EmploisDuTemps.idEDT)
+
+TABLE : Creneau
+    idCreneau (PK)
+    jourRef (FK → Jour.libelle)
+    heureDebut
+    heureFin
+
+TABLE : DisciplineCreneau
+    disRef (FK → Discipline.idDiscipline)
+    creneauRef (FK → Creneau.idCreneau)
+
+TABLE : Sceance
+    idSceance (PK)
+    creneauRef (FK → Creneau.idCreneau)
+    EnsRef (FK → Enseignant.idEnseignant)
+
+TABLE : Examen
+    idExamen (PK)
+    anneeRef (FK → AnneeScolaire.idAnnee)
+    libelle
+
+TABLE : ClasseExamen
+    classeRef (FK → Classe.idClasse)
+    examRef (FK → Examen.idExamen)
+    PRIMARY KEY (classeRef, examRef)
+
+TABLE : MatiereExamen
+    matRef (FK → Matiere.idMatiere)
+    examRef (FK → Examen.idExamen)
+    PRIMARY KEY (matRef, examRef)
+
+TABLE : Bulletin
+    idBulletin (PK)
+    InsRef (FK → Inscription.idInscription)
+
+TABLE : Note
+    idNote (PK)
+    valeur
+    appreciation
+    InsRef (FK → Inscription.idInscription)
+    matRef (FK → Matiere.idMatiere)
+
+TABLE : Sanction
+    idSanction (PK)
+    type_sanction
+    dateDebut
+    dateFin
+    InsRef (FK → Inscription.idInscription)
+
+TABLE : Avertissement
+    idAvertissement (PK)
+    dateAvert
+    description
+    InsRef (FK → Inscription.idInscription)
